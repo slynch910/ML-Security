@@ -1,8 +1,8 @@
-#Overview:
+# Overview:
 This code applies a Scikit-Learn's LinearSVC model to the Iot-23, NSL-KDD, UCI, and Kitsune datasets for
 the purposes of optimization and comparison of the model's performance on each of the individual datasets
 
-##Support Vector Machines, Linear Support Vector Machines, and sklearn.LinearSVC:
+## Support Vector Machines, Linear Support Vector Machines, and sklearn.LinearSVC:
 A Support Vector Machine is a supervised learning model used in this instance for the purposes
 of classification. They are typically used as a binary linear classifier,
 assigning each datapoint into one of two categories, represented by its position
@@ -15,7 +15,7 @@ The choice of model is Scikit-Learn's LinearSVC, which is an implementation
 of linear support vector machine classifiers.
 
 
-###Data Preprocessing: 
+### Data Preprocessing: 
 
 Iot23 dataset:
 I took the original Iot23 dataset and selected about 1/4 of the datapoints
@@ -39,7 +39,7 @@ I took the original UCI dataset and selected about 15,000 entries for each label
 (syn, scan, benign, udp, udpplain).
 
 
-####Tuning Hyperparameters and Overfitting Detection:
+#### Tuning Hyperparameters and Overfitting Detection:
 hyperparameters were tuned by hand. Results are included in the hyperparameter-tuning.txt file 
 
 my choices for detecting overfitting was manual comparison of training and validation accuracies and
