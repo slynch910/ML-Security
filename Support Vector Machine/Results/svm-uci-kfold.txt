@@ -1,0 +1,80 @@
+=======================================================
+Accuracy rating for k=1: 1.0
+Precision rating for k=1: 1.0
+Recall rating for k=1: 1.0
+Training Accuracy rating for k = 1: 0.999728388355268
+Training Precision rating for k = 1: 0.9997285421580231
+Training Recall rating for k = 1: 0.9997283950617284
+=======================================================
+Accuracy rating for k=2: 0.9996666666666667
+Precision rating for k=2: 0.9996670365931516
+Recall rating for k=2: 0.9996666666666667
+Training Accuracy rating for k = 2: 0.9997777722906739
+Training Precision rating for k = 2: 0.9997779002036379
+Training Recall rating for k = 2: 0.9997777777777778
+=======================================================
+Accuracy rating for k=3: 0.9997777777777778
+Precision rating for k=3: 0.9997779258272264
+Recall rating for k=3: 0.9997777777777778
+Training Accuracy rating for k = 3: 0.9998024642583767
+Training Precision rating for k = 3: 0.9998025468109076
+Training Recall rating for k = 3: 0.9998024691358025
+=======================================================
+Accuracy rating for k=4: 0.9997777777777778
+Precision rating for k=4: 0.9997779258272264
+Recall rating for k=4: 0.9997777777777778
+Training Accuracy rating for k = 4: 0.9997777722906739
+Training Precision rating for k = 4: 0.9997778627645081
+Training Recall rating for k = 4: 0.9997777777777778
+=======================================================
+Accuracy rating for k=5: 0.9995555555555555
+Precision rating for k=5: 0.9995559995067648
+Recall rating for k=5: 0.9995555555555556
+Training Accuracy rating for k = 5: 0.9997530803229709
+Training Precision rating for k = 5: 0.9997531631676919
+Training Recall rating for k = 5: 0.9997530864197529
+=======================================================
+Accuracy rating for k=6: 0.9996666666666667
+Precision rating for k=6: 0.9996670365931516
+Recall rating for k=6: 0.9996666666666667
+Training Accuracy rating for k = 6: 0.9997777722906739
+Training Precision rating for k = 6: 0.9997778362576283
+Training Recall rating for k = 6: 0.9997777777777778
+=======================================================
+Accuracy rating for k=7: 0.9997777777777778
+Precision rating for k=7: 0.9997779258272264
+Recall rating for k=7: 0.9997777777777778
+Training Accuracy rating for k = 7: 0.9997654263068224
+Training Precision rating for k = 7: 0.9997655189143497
+Training Recall rating for k = 7: 0.9997654320987653
+=======================================================
+Accuracy rating for k=8: 0.9993333333333333
+Precision rating for k=8: 0.9993348819443212
+Recall rating for k=8: 0.9993333333333334
+Training Accuracy rating for k = 8: 0.9997777722906739
+Training Precision rating for k = 8: 0.9997778472334625
+Training Recall rating for k = 8: 0.9997777777777778
+=======================================================
+Accuracy rating for k=9: 0.9991110123347039
+Precision rating for k=9: 0.9991117769391593
+Recall rating for k=9: 0.9991111111111111
+Training Accuracy rating for k = 9: 0.9997777750342597
+Training Precision rating for k = 9: 0.9997779011180649
+Training Recall rating for k = 9: 0.9997777777777778
+=======================================================
+Accuracy rating for k=10: 0.999777753083676
+Precision rating for k=10: 0.9997780736795384
+Recall rating for k=10: 0.9997777777777778
+Training Accuracy rating for k = 10: 0.9997654292028296
+Training Precision rating for k = 10: 0.9997655198260654
+Training Recall rating for k = 10: 0.9997654320987653
+=======================================================
+Mean Test Accuracy: 0.9996444320973934
+Mean Test Precision: 0.9996448582737767
+Mean Test Recall: 0.9996444444444444
+
+
+
+Mean Training Accuracy: 0.9997703652643223
+Mean Training Precision: 0.9997704638454339
+Mean Training Recall: 0.9997703703703703
