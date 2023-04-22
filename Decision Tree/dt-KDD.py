@@ -6,6 +6,8 @@ from sklearn import tree
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_validate
 from scipy.io import arff
+from sklearn.metrics import ConfusionMatrixDisplay
+import csv
 
 
 ##############################################
@@ -119,6 +121,10 @@ class DT:
         print("========== Classification Report ==========")
         print(metrics.classification_report(self.Y_test, self.y_pred, digits=3))
         print("========== Confusion Matrix ==========")
+        #disp = ConfusionMatrixDisplay(confusion_matrix=cm).plot()
+        cm = metrics.confusion_matrix(self.Y_test, self.y_pred)
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm).plot()
+        
         print(metrics.confusion_matrix(self.Y_test, self.y_pred))   
         print("========== Tree Structure ==========")
         print(tree.export_text(self.classifier))
@@ -134,14 +140,22 @@ class DT:
         # Perform the cross validation
         scores = cross_validate(self.classifier, self.X, self.Y, scoring=self.scoring_dict, cv=kf, return_train_score=True)
         
+        results = []
+        
         # Print out the results of the cross validation for each fold. 
         print("=======================================================")
         for i in range(0,self.num_folds):
+          results.append([scores["test_acc"][i], scores["test_prec_macro"][i], scores["test_rec_macro"][i]])
           print("Accuracy rating for k={}: {}".format(i+1, scores["test_acc"][i]))
           print("Precision rating for k={}: {}".format(i+1, scores["test_prec_macro"][i]))
           print("Recall rating for k={}: {}".format(i+1, scores["test_rec_macro"][i]))
           print("=======================================================")
         
+        with open("dt_results.csv", "w") as out:
+            csv_out = csv.writer(out)
+            csv_out.writerow(["Accuracy", "Precision", "Recall"])
+            csv_out.writerows(results)
+
 
 if __name__ == "__main__":
     dt = DT()
