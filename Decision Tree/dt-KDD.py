@@ -8,7 +8,8 @@ from sklearn.model_selection import cross_validate
 from scipy.io import arff
 from sklearn.metrics import ConfusionMatrixDisplay
 import csv
-
+from sklearn.metrics import accuracy_score, recall_score, precision_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
+from matplotlib import pyplot as plt
 
 ##############################################
 # Class holding the decision tree model for 
@@ -53,7 +54,7 @@ class DT:
     # Initialize the decision tree model with the 
     # corresponding dataset.    
     ##############################################
-    def __init__(self, dataset_path="KDDTrain+.arff"):
+    def __init__(self, dataset_path="datasets/KDDTrain+.arff"):
         # # The KDD data is in arff format, so we need to find a way to import it
         self.dataset = pd.DataFrame(arff.loadarff(dataset_path)[0]) 
         print(self.dataset)
@@ -151,11 +152,19 @@ class DT:
           print("Recall rating for k={}: {}".format(i+1, scores["test_rec_macro"][i]))
           print("=======================================================")
         
-        with open("dt_results.csv", "w") as out:
+        with open("results/dt_results_kdd.csv", "w") as out:
             csv_out = csv.writer(out)
             csv_out.writerow(["Accuracy", "Precision", "Recall"])
             csv_out.writerows(results)
 
+
+        print(f"[+] Creating Confusion Matrix for KDD dataset...")
+        disp = ConfusionMatrixDisplay(
+            confusion_matrix=confusion_matrix(self.Y_test, self.y_pred), 
+            display_labels=self.Y.unique()
+        ).plot()
+
+        plt.savefig(f"results/KDD_confusion_matrix.png") 
 
 if __name__ == "__main__":
     dt = DT()

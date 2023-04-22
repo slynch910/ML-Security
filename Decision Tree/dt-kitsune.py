@@ -9,6 +9,9 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
 from sklearn.model_selection import train_test_split
 import csv
+from sklearn.metrics import accuracy_score, recall_score, precision_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+
 
 # Scoring Dictionary
 scoring_dict = {
@@ -17,7 +20,7 @@ scoring_dict = {
     'rec_macro': 'recall_macro'
 }
 
-onlineFilePath = "mirai_combined.csv"
+onlineFilePath = "datasets/mirai_combined.csv"
 
 # The preprocessed data had added a row for the headers.
 kitsune = pd.read_csv(onlineFilePath, header=0)
@@ -69,7 +72,17 @@ for i in range(0, num_folds):
     print("=======================================================")
             
         
-with open("dt_results.csv", "w") as out:
+with open("results/dt_results_kitsune.csv", "w") as out:
     csv_out = csv.writer(out)
     csv_out.writerow(["Accuracy", "Precision", "Recall"])
     csv_out.writerows(results)
+
+
+
+print(f"[+] Creating Confusion Matrix for Kitsune dataset...")
+disp = ConfusionMatrixDisplay(
+    confusion_matrix=confusion_matrix(Y_test, y_pred), 
+    display_labels=Y.unique()
+).plot()
+
+plt.savefig(f"results/Kitsune_confusion_matrix.png") 

@@ -11,6 +11,9 @@ import numpy as np
 import csv
 
 
+from sklearn.metrics import accuracy_score, recall_score, precision_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
+from matplotlib import pyplot as plt
+
 
 
 ####################################################
@@ -32,7 +35,7 @@ class DT:
     ####################################################
     # Constructor
     ####################################################    
-    def __init__(self, datasetPath="uci_dataset.csv"):
+    def __init__(self, datasetPath="datasets/uci_dataset.csv"):
         
         # Read in the data.
         self.dataset = pd.read_csv(datasetPath, header=0)
@@ -109,10 +112,18 @@ class DT:
         print(results)
             
         
-        with open("dt_results.csv", "w") as out:
+        with open("results/dt_results_uci.csv", "w") as out:
             csv_out = csv.writer(out)
             csv_out.writerow(["Accuracy", "Precision", "Recall"])
             csv_out.writerows(results)
+
+        print(f"[+] Creating Confusion Matrix for UCI dataset...")
+        disp = ConfusionMatrixDisplay(
+            confusion_matrix=confusion_matrix(self.Y_test, self.y_pred), 
+            display_labels=self.Y.unique()
+        ).plot()
+
+        plt.savefig(f"results/UCI_confusion_matrix.png") 
 
 if __name__ == "__main__":
     dt = DT()

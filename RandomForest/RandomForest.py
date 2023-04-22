@@ -51,7 +51,7 @@ class RandomForest:
         # Predicting on the test data.
         print("Accuracy: ", accuracy_score(self.y_test, self.y_pred))
         print("========= Classification Report =========")
-        print(classification_report(self.y_test, self.y_pred, digits=3))
+        print(classification_report(self.y_test, self.y_pred, digits=6))
         print("========= Confusion Matrix =========")
         print(confusion_matrix(self.y_test, self.y_pred))
         # print("========= Tree Structure =========")
