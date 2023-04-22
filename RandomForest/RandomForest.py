@@ -7,10 +7,13 @@ from sklearn.model_selection import train_test_split, cross_validate, Randomized
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.metrics import accuracy_score, recall_score, precision_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 
-import sys, csv 
+import sys, csv, threading
+
+from numpy.lib import average
+import numpy as np
 
 import matplotlib.pyplot as plt
 
@@ -65,8 +68,7 @@ class RandomForest:
 
         plt.savefig(f"results/{type(self).__name__}_confusion_matrix.png") 
         # plt.show()
-
-        
+     
     def cross_validate(self): 
         """ Cross validate the Random Forest model. """
         print("[+] Cross validating the Random Forest model...") 
@@ -81,7 +83,7 @@ class RandomForest:
                 'prec_macro': 'precision_macro',
                 'rec_macro': 'recall_macro'
             }, 
-            cv=self.cv, 
+            cv=StratifiedKFold(n_splits=self.num_folds,random_state=42,shuffle=True), 
             return_train_score=True
         )  
         
@@ -107,14 +109,23 @@ class RandomForest:
             print(f"Precision rating for k={i+1}: {scores['test_prec_macro'][i]}")
             print(f"Recall rating for k={i+1}:{scores['test_rec_macro'][i]}") 
             print("=======================================================")
-    
+
+        # print(f"Mean Test Accuracy: {np.lib.average(scores['test_acc'])}")
+        # print(f"Mean Test Precision: {np.lib.average(scores['test_prec_macro'])}")
+        # print(f"Mean Test Recall: {np.lib.average(scores['test_rec_macro'])}")
+
         print(f"[*] Saving cross validation results for {type(self).__name__} dataset...")
         with open(f"results/{type(self).__name__}_results.csv", "w") as out:
             csv_out = csv.writer(out)
             csv_out.writerow(["Accuracy", "Precision", "Recall"])
+
+            # csv_out.writerow([
+            #     np.lib.average(scores["test_acc"]), 
+            #     np.lib.average(scores["test_prec_macro"], 
+            #     np.lib.average(scores["test_rec_macro"]))
+            # ])
+            
             csv_out.writerows(results)
-
-
 
     def pick_hyperparams(self):
         """ Pick the best hyperparameters for the Random Forest model. """
@@ -151,7 +162,17 @@ class RandomForest:
 
         self.model = best_models
 
+        # Write best params to file in results directory.
+        with open(f"results/{type(self).__name__}_best_params.txt", "w") as out:
+            out.write(str(best_params))
 
+    def run(self): 
+        """ Run the Random Forest model."""
+        self.train()
+        self.metrics()
+        self.cross_validate()
+
+        print(f"[+] Done with {type(self).__name__} ")
 
 class KDD(RandomForest):
     def __init__(self, dataset_location="datasets/KDDTrain+.arff", *a, **k):
@@ -241,116 +262,27 @@ class IOT(RandomForest):
 
 if __name__ == "__main__": 
 
+    print(f"[+] Starting {sys.argv[1].lower()} ")
+
     match sys.argv[1].lower():
+
         case "kdd":
-            rf = KDD()
+            KDD().run()
         case "mirai":
-            rf = MIRAI()
+            MIRAI().run()
         case "iot":
-            rf = IOT()
+            IOT().run()
         case "uci":
-            rf = UCI()
+            UCI().run()
+
+        case "all":
+            models = [KDD(), MIRAI(), IOT(), UCI()]
+            map(lambda x: x.run(), models)    
+
+        case "thread":
+            models = [KDD(), MIRAI(), IOT(), UCI()]
+            map(lambda x: threading.Thread(target=x.run).start(), models)    
+
         case _:
             print("[-] Invalid dataset name. Please choose from: kdd, mirai, iot, uci")
             sys.exit(0)
-
-    rf.train()
-    rf.metrics()
-    rf.cross_validate()
-
-
-
-"""
-
-ipython RandomForest.py KDD
-[+] Training the Random Forest model on KDD dataset...
-[+] Picking the best hyperparameters for the Random Forest model on KDD dataset...
-[*] Picked best hyperparms, now evaluating...
-R2: 0.996388100577507
-Best params: {'n_estimators': 50, 'min_samples_split': 4, 'min_samples_leaf': 5, 'max_samples': 10000, 'max_features': 0.5, 'max_depth': None}
-[+] Evaluating the Random Forest model on KDD dataset...
-Accuracy:  0.9954752927168089
-========= Classification Report =========
-              precision    recall  f1-score   support
-
-           0      0.994     0.998     0.996     13457
-           1      0.998     0.993     0.995     11738
-
-    accuracy                          0.995     25195
-   macro avg      0.996     0.995     0.995     25195
-weighted avg      0.995     0.995     0.995     25195
-
-========= Confusion Matrix =========
-[[13429    28]
- [   86 11652]]
-[+] Cross validating the Random Forest model...
-{'fit_time': array([1.39534044, 2.35042405, 2.7372086 , 1.80262041, AccuraAccuracy for the fAccuracy for the fold no. 6 on the test set: 0.9962689529252997
-Accuracy for the fold no. 7 on the test set: 0.9967452568071763Accuracy for the fold no. 8 on the test set: 0.9970627927284273Accuracy for the fold no. 9 on the test set: 0.9968246407874891
-
-
-
-ipython RandomForest.py MIRAI
-[+] Training the Random Forest model on MIRAI dataset...
-[+] Picking the best hyperparameters for the Random Forest model on MIRAI dataset...
-[*] Picked best hyperparms, now evaluating...
-R2: 0.9993714285714286
-Best params: {'n_estimators': 50, 'min_samples_split': 8, 'min_samples_leaf': 3, 'max_samples': 10000, 'max_features': 0.5, 'max_depth': 10}
-[+] Evaluating the Random Forest model on MIRAI dataset...
-Accuracy:  0.9990222222222223
-========= Classification Report =========
-              precision    recall  f1-score   support
-
-      Benign      0.998     1.000     0.999     11130
-   Malicious      1.000     0.998     0.999     11370
-
-    accuracy                          0.999     22500
-   macro avg      0.999     0.999     0.999     22500
-weighted avg      0.999     0.999     0.999     22500
-
-========= Confusion Matrix =========
-[[11126     4]
- [   18 11352]]
-[+] Cross validating the Random Forest model...
-{'fit_time': array([5.42546606, 7.4524827 , 5.53026748, 6.40108776, 5.03117561,
-       4.98650146, 4.94127679, 5.42726755, 5.42320442, 5.16076684]), 'scor,Accuracy for the fold no. 6 on the test set: 0.9997333333333334Accuracy for the fold no. 7 on the test set: 0.9997333333333334Accuracy for the fold no. 8 on the test set: 0.9997333333333334Accuracy for the fold no. 9 on the test set: 0.9089333333333334
-
-
-
- ipython RandomForest.py UCI
-[+] Training the Random Forest model on UCI dataset...
-[+] Picking the best hyperparameters for the Random Forest model on UCI dataset...
-[*] Picked best hyperparms, now evaluating...
-R2: 0.9998950817170353
-Best params: {'n_estimators': 30, 'min_samples_split': 12, 'min_samples_leaf': 1, 'max_samples': 10000, 'max_features': 'sqrt', 'max_depth': 10}    
-[+] Evaluating the Random Forest model on UCI dataset...
-Accuracy:  0.9998887232101128
-========= Classification Report =========
-              precision    recall  f1-score   support
-
-         ack      1.000     1.000     1.000     14903
-      benign      0.999     1.000     1.000     14860
-        scan      1.000     1.000     1.000     15013
-         syn      1.000     1.000     1.000     14960
-         udp      1.000     1.000     1.000     15030
-    udpplain      1.000     1.000     1.000     15100
-
-    accuracy                          1.000     89866
-   macro avg      1.000     1.000     1.000     89866
-weighted avg      1.000     1.000     1.000     89866
-
-========= Confusion Matrix =========
-[[14903     0     0     0     0     0]
- [    0 14860     0     0     0     0]
- [    0     1 15012     0     0     0]
- [    0     4     0 14956     0     0]
- [    0     1     2     0 15027     0]
- [    0     2     0     0     0 15098]]
-[+] Cross validating the Random Forest model...
-{'fit_time': array([3.19257426, 3.47621751, 3.36378813, 3.24502516, 3.40400934,
-       3.44620895, 4.78043818, 4.77842426, 3.22920275, 2.2340703 ]), 'score_time': array([1.02742624, 0.83275342, 0.89974999, 1.42111921, 0.52066684,
-774662Accuracy for the fold no. 6 on the test set: 0.999766316140878Accuracy for the fold no. 7 on the test set: 0.999866466366216
-Accuracy for the fold no. 8 on the test set: 0.999799699549324Accuracy for the fold no. 9 on the test set: 0.999933233183108
-
-"""
-
-
