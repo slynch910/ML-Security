@@ -1,0 +1,96 @@
+iot-23 SVM:
+iot23 svm:
+
+test size = 0.4
+
+C = 1, loss = hinge, max_iter = 10000000   *optimal results, traning accuracy too low
+Test Accuracy: 0.9627987025882041
+Test Precision: 0.9647346920234686
+Test Recall: 0.9627987025882041
+
+C = 100, loss = hinge, max_iter = 1000000
+Test Accuracy: 0.9242073211094195
+Test Precision: 0.9379725046918996
+Test Recall: 0.9242073211094195
+
+C = 0.1, loss = hinge, max_iter = 1000000
+Test Accuracy: 0.8904150393857152
+Test Precision: 0.9291430808568557
+Test Recall: 0.8904150393857152
+
+C = 1, loss = hinge, max_iter = 10000000
+Test Accuracy: 0.9627987025882041
+Test Precision: 0.9647346920234686
+Test Recall: 0.9627987025882041
+
+test size = 0.3
+C = 1, loss = hinge, max_iter = 10000000 
+Test Accuracy: 0.9596646072374228
+Test Precision: 0.9749058485203262
+Test Recall: 0.9596646072374228
+
+NSL-KDD SVM:
+
+test size = 0.3
+
+C = 1,  loss = hinge, max_iter = 10000 -->
+Test Accuracy: 0.9557049110922947
+Test Precision: 0.9557156912374127
+Test Recall: 0.9557049110922947
+
+C = 1,  loss = hinge, max_iter = 10000000 -->
+Test Accuracy: 0.9592379440365152
+Test Precision: 0.9593456730614739
+Test Recall: 0.9592379440365152
+
+
+test size = 0.4
+
+C = 1,  loss = hinge, max_iter = 10000 -->
+
+Test Accuracy: 0.9558444135741219
+Test Precision: 0.9558649622034259
+Test Recall: 0.9558444135741219
+
+C = 1,  loss = hinge, max_iter = 10000000 -->
+Test Accuracy: 0.956042865647946
+Test Precision: 0.9560646549899834
+Test Recall: 0.956042865647946
+
+C = 10,  loss = hinge, max_iter = 10000000 -->     *optimal results
+Test Accuracy: 0.9559039491962691
+Test Precision: 0.955910509287918
+Test Recall: 0.9559039491962691
+
+C = 10,  loss = hinge, max_iter = 10000 -->
+Test Accuracy: 0.955328438182179
+Test Precision: 0.9553421486287199
+Test Recall: 0.955328438182179
+
+
+Kitsune SVM:
+Literally any C above 0.0001 with any parameters
+Test Accuracy: 1.0
+Test Precision: 1.0
+Test Recall: 1.0
+
+C = .0001, loss = "hinge", max_iter = 1000000
+Test Accuracy: 0.9990333333333333
+Test Precision: 0.9990351916915258
+Test Recall: 0.9990333333333333
+
+- the large majority of Cs less than 0.0001 consistently get ~92% accuracy or slightly lower regardless of the other parameters
+- cross-validation indicated overfitting with average training acc,rec,and prec of 1.0
+
+C = .0000875, loss = "hinge", max_iter = 1000000   *optimal results
+Test Accuracy: 0.9991555555555556
+Test Precision: 0.9991569725337809
+Test Recall: 0.9991555555555556
+
+UCI SVM:
+C = 1, loss = "hinge", max_iter = 10000000
+Test Accuracy: 0.9998148148148148
+Test Precision: 0.9998148884758632
+Test Recall: 0.9998148148148148
+
+- got really good results on my first try, not going to mess with it
