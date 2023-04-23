@@ -1,0 +1,35 @@
+KDD: {
+    'n_estimators': 60, 
+    'max_depth': 3
+    'min_samples_split': 16, 
+    'min_samples_leaf': 19, 
+    'max_samples': 10000, 
+    'max_features': 0.5, 
+}
+
+MIRAI:  {
+    'n_estimators': 40,
+    'max_depth': 10
+    'min_samples_split': 2,
+    'min_samples_leaf': 13,
+    'max_samples': 10000,
+    'max_features': 'sqrt',
+}
+
+IOT: {
+    'n_estimators': 50,
+    'max_depth': None
+    'min_samples_split': 8,
+    'min_samples_leaf': 15,
+    'max_samples': 10000,
+    'max_features': 'sqrt',
+}
+
+UCI {
+    'n_estimators': 40,
+    'max_depth': None
+    'min_samples_split': 4, 
+    'min_samples_leaf': 3, 
+    'max_samples': 10000, 
+    'max_features': 1,
+}

@@ -1,0 +1,9 @@
+Accuracy: 0.9988888888888889========= Classification Report ========= 
+               precision    recall  f1-score   support
+
+      Benign   0.997937  0.999820  0.998878     11130
+   Malicious   0.999824  0.997977  0.998900     11370
+
+    accuracy                       0.998889     22500
+   macro avg   0.998881  0.998899  0.998889     22500
+weighted avg   0.998891  0.998889  0.998889     22500

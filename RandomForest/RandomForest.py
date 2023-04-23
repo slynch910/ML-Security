@@ -52,13 +52,16 @@ class RandomForest:
         # print("ACCURACY OF THE MODEL: ", metrics.accuracy_score(self.y_test, self.y_pred))
 
         # Predicting on the test data.
-        print("Accuracy: ", accuracy_score(self.y_test, self.y_pred))
-        print("========= Classification Report =========")
-        print(classification_report(self.y_test, self.y_pred, digits=6))
-        print("========= Confusion Matrix =========")
-        print(confusion_matrix(self.y_test, self.y_pred))
-        # print("========= Tree Structure =========")
-        # print(tree.export_text(self.model))
+        accuracy =f"Accuracy: {accuracy_score(self.y_test, self.y_pred)}"
+        report = f"========= Classification Report ========= \n {classification_report(self.y_test, self.y_pred, digits=6)}"
+
+        print(accuracy)
+        print(report)
+
+        print(f"[*] Saving metrics for {type(self).__name__} dataset...")
+        with open(f"results/{type(self).__name__}_metrics.txt", "w") as out:
+            out.write(accuracy)
+            out.write(report)
 
         print(f"[+] Creating Confusion Matrix for {type(self).__name__} dataset...")
         disp = ConfusionMatrixDisplay(
