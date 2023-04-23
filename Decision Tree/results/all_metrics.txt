@@ -1,0 +1,48 @@
+========== IoT Classification Report ==========
+              precision    recall  f1-score   support
+
+           1      1.000     1.000     1.000     21263
+           2      0.000     0.000     0.000        19
+           3      0.500     1.000     0.667         2
+           5      0.995     1.000     0.997      3347
+           6      1.000     1.000     1.000     37455
+
+    accuracy                          1.000     62086
+   macro avg      0.699     0.800     0.733     62086
+weighted avg      0.999     1.000     1.000     62086
+
+
+========== KDD Classification Report ==========
+              precision    recall  f1-score   support
+
+           0      0.985     0.907     0.944     13506
+           1      0.901     0.984     0.941     11689
+
+    accuracy                          0.943     25195
+   macro avg      0.943     0.945     0.942     25195
+weighted avg      0.946     0.943     0.943     25195
+
+
+========= MIRAI Classification Report =========
+              precision    recall  f1-score   support
+
+      Benign      0.879     0.997     0.934     11261
+   Malicious      0.997     0.862     0.925     11239
+
+    accuracy                          0.930     22500
+   macro avg      0.938     0.930     0.929     22500
+weighted avg      0.938     0.930     0.929     22500
+
+========== UCI Classification Report ==========
+              precision    recall  f1-score   support
+
+         ack      0.978     0.992     0.985      9908
+      benign      0.998     1.000     0.999     10004
+        scan      1.000     1.000     1.000     10010
+         syn      1.000     1.000     1.000     10048
+         udp      0.967     0.989     0.978      9942
+    udpplain      0.981     0.943     0.962      9999
+
+    accuracy                          0.987     59911
+   macro avg      0.987     0.987     0.987     59911
+weighted avg      0.987     0.987     0.987     59911
