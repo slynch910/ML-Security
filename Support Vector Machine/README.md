@@ -39,7 +39,7 @@ I took the original UCI dataset and selected about 15,000 entries for each label
 (syn, scan, benign, udp, udpplain).
 
 
-#### Tuning Hyperparameters and Overfitting Detection:
+### Tuning Hyperparameters and Overfitting Detection:
 hyperparameters were tuned by hand. Results are included in the hyperparameter-tuning.txt file 
 
 my choices for detecting overfitting was manual comparison of training and validation accuracies and
