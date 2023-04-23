@@ -9,12 +9,13 @@ Original file is located at
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split, StratifiedKFold, cross_validate
 from sklearn.svm import LinearSVC
-from sklearn.metrics import accuracy_score, recall_score, precision_score, confusion_matrix,ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, recall_score, precision_score, classification_report, confusion_matrix,ConfusionMatrixDisplay
 from scipy.io import arff
 from numpy.lib import average
 
@@ -28,7 +29,7 @@ iot23['id.resp_h'] = p.fit_transform(iot23['id.resp_h'])
 iot23['proto'] = p.fit_transform(iot23['proto'])
 iot23['conn_state'] = p.fit_transform(iot23['conn_state'])
 iot23['history'] = p.fit_transform(iot23['history'])
-iot23['label'] = p.fit_transform(iot23['label']) 
+#iot23['label'] = p.fit_transform(iot23['label']) 
 iot23 = iot23.drop(columns=['uid', 'service', 'duration', 'orig_bytes', 'resp_bytes', 'local_orig', 'local_resp'])
 iot23.head()
 
@@ -52,13 +53,19 @@ print("Test Accuracy: {}".format(accuracy_score(y_test, predictions)))
 print("Test Precision: {}".format(precision_score(y_test,predictions, average = 'weighted')))
 print("Test Recall: {}".format(recall_score(y_test,predictions, average = 'weighted')))
 
+cr = classification_report(y_test, predictions);
+print(cr);
+
 predictions = scaled_svm.predict(X_train)
 print("Training Accuracy: {}".format(accuracy_score(y_train, predictions)))
 print("Trainign Precision: {}".format(precision_score(y_train,predictions, average = 'weighted')))
 print("Training Recall: {}".format(recall_score(y_train,predictions, average = 'weighted')))
 
+cr = classification_report(y_train, predictions);
+print(cr);
+
 cm = confusion_matrix(y_train, predictions)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm).plot()
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels = ["Benign", "C&C", "C&C File Download", "Okiru", "POHPS"])
 
 print("Labels:")
 print("0 --> Benign")
@@ -66,6 +73,9 @@ print("1 --> C&C")
 print("2 --> C&C FileDownload")
 print("3 --> Okiru")
 print("4 --> PartOfAHorizontalPortScan")
+
+fig, ax = plt.subplots(figsize=(10,10))
+disp.plot(ax=ax)
 
 #using stratified KFold because data is extremely unbalanced
 num_splits = 8
@@ -108,7 +118,7 @@ Y2
 scaler2 = StandardScaler()
 svm2 = LinearSVC(C = 1, loss = "hinge", max_iter = 10000000, random_state = 42)
 scaled_svm2 = Pipeline([("scaler", scaler2), ("linear_svc", svm2),])
-X_train2, X_test2, y_train2, y_test2 = train_test_split(X2,Y2, test_size = 0.3, random_state = 42)
+X_train2, X_test2, y_train2, y_test2 = train_test_split(X2,Y2, test_size = 0.4, random_state = 42)
 
 scaled_svm2.fit(X_train2, y_train2)
 
@@ -117,13 +127,19 @@ print("Test Accuracy: {}".format(accuracy_score(y_test2, predictions2)))
 print("Test Precision: {}".format(precision_score(y_test2,predictions2, average = 'weighted')))
 print("Test Recall: {}".format(recall_score(y_test2,predictions2, average = 'weighted')))
 
+cr = classification_report(y_test2, predictions2, digits = 6);
+print(cr);
+
 predictions2 = scaled_svm2.predict(X_train2)
 print("Training Accuracy: {}".format(accuracy_score(y_train2, predictions2)))
 print("Training Precision: {}".format(precision_score(y_train2,predictions2, average = 'weighted')))
 print("Training Recall: {}".format(recall_score(y_train2,predictions2, average = 'weighted')))
 
+cr = classification_report(y_train2, predictions2, digits = 6);
+print(cr);
+
 cm = confusion_matrix(y_train2, predictions2)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm).plot()
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels = Y2.unique()).plot()
 
 num_splits2 = 10
 kf2 = StratifiedKFold(n_splits=num_splits2,random_state=42,shuffle=True)
@@ -132,7 +148,7 @@ scores2 = cross_validate(scaled_svm2, X2, Y2, scoring = scorings2, cv = kf2, ret
 
 print("=======================================================")
 i = 0
-for i in range(0,num_splits):
+for i in range(0,num_splits2):
   print("Accuracy rating for k={}: {}".format(i+1, scores2["test_acc"][i]))
   print("Precision rating for k={}: {}".format(i+1, scores2["test_prec_macro"][i]))
   print("Recall rating for k={}: {}".format(i+1, scores2["test_rec_macro"][i]))
@@ -156,7 +172,7 @@ for cols in ["protocol_type", "service", "flag", "class"]:
             nsl_kdd[cols] = nsl_kdd[cols].str.decode("utf-8")
 
 nsl_kdd= nsl_kdd.replace({"protocol_type": {"tcp": 0, "udp": 1, "icmp": 2,}})
-nsl_kdd = nsl_kdd.replace({"class": {"normal": 0, "anomaly": 1}})
+#nsl_kdd = nsl_kdd.replace({"class": {"normal": 0, "anomaly": 1}})
 
 categories_that_need_mappings = ["service", "flag"]
 for category in categories_that_need_mappings: 
@@ -180,17 +196,24 @@ X_train3, X_test3, y_train3, y_test3 = train_test_split(X3,Y3, test_size = 0.4, 
 scaled_svm3.fit(X_train3, y_train3)
 
 predictions3 = scaled_svm3.predict(X_test3)
+
 print("Test Accuracy: {}".format(accuracy_score(y_test3, predictions3)))
 print("Test Precision: {}".format(precision_score(y_test3,predictions3, average = 'weighted')))
 print("Test Recall: {}".format(recall_score(y_test3,predictions3, average = 'weighted')))
+
+cr = classification_report(y_test3, predictions3);
+print(cr);
 
 predictions3 = scaled_svm3.predict(X_train3)
 print("Training Accuracy: {}".format(accuracy_score(y_train3, predictions3)))
 print("Training Precision: {}".format(precision_score(y_train3,predictions3, average = 'weighted')))
 print("Training Recall: {}".format(recall_score(y_train3,predictions3, average = 'weighted')))
 
+cr = classification_report(y_train3, predictions3);
+print(cr);
+
 cm = confusion_matrix(y_train3, predictions3)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm).plot()
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels = Y3.unique()).plot()
 
 num_splits3 = 10
 kf3 = StratifiedKFold(n_splits=num_splits3,random_state=42,shuffle=True)
@@ -239,13 +262,19 @@ print("Test Accuracy: {}".format(accuracy_score(y_test4, predictions4)))
 print("Test Precision: {}".format(precision_score(y_test4,predictions4, average = 'weighted')))
 print("Test Recall: {}".format(recall_score(y_test4,predictions4, average = 'weighted')))
 
+cr = classification_report(y_test4, predictions4);
+print(cr);
+
 predictions4 = scaled_svm4.predict(X_train4)
 print("Training Accuracy: {}".format(accuracy_score(y_train4, predictions4)))
 print("Training Precision: {}".format(precision_score(y_train4,predictions4, average = 'weighted')))
 print("Training Recall: {}".format(recall_score(y_train4,predictions4, average = 'weighted')))
 
+cr = classification_report(y_train4, predictions4, digits = 7);
+print(cr);
+
 cm = confusion_matrix(y_train4, predictions4)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm).plot()
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels = Y4.unique()).plot()
 
 num_splits4 = 10
 kf4 = StratifiedKFold(n_splits=num_splits4,random_state=42,shuffle=True)
