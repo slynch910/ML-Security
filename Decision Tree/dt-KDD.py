@@ -120,7 +120,7 @@ class DT:
     def print_metrics(self):
         print("accuracy: ", metrics.accuracy_score(self.Y_test, self.y_pred))
         print("========== Classification Report ==========")
-        print(metrics.classification_report(self.Y_test, self.y_pred, digits=3))
+        print(metrics.classification_report(self.Y_test, self.y_pred, digits=6))
         print("========== Confusion Matrix ==========")
         #disp = ConfusionMatrixDisplay(confusion_matrix=cm).plot()
         cm = metrics.confusion_matrix(self.Y_test, self.y_pred)
